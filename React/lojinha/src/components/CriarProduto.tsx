@@ -4,9 +4,9 @@ import axios from 'axios';
 const CriarProduto: React.FC = () => {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [preco, setPreco] = useState<number>(0); // Inicializa como número
+  const [preco, setPreco] = useState<number>(); // Inicializa como número
   const [categoriaId, setCategoriaId] = useState(''); // Adiciona categoria_id
-  const [estoque, setEstoque] = useState<number>(0); // Adiciona estoque
+  const [estoque, setEstoque] = useState<number>(); // Adiciona estoque
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
