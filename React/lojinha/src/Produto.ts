@@ -12,5 +12,5 @@ export interface Produto {
     dataValidade: string;
     createdAt: string;
     categoria: Categoria;
-    categoriaId: number;
+    categoriaId: string;
 }
