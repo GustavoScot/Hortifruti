@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import ListaProdutos from './ListaProdutos';
 import Login from './components/Login';
 import CriarProduto from './components/CriarProduto';
+import UpdateProduto from './components/UpdateProduto';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [view, setView] = useState<'lista' | 'criar'>('lista'); // Estado para alternar entre lista e criação de produtos
+  const [view, setView] = useState<'lista' | 'criar' | 'alterar'>('lista'); // Adiciona 'alterar'
 
   const handleLoginSuccess = () => {
-    setIsAuthenticated(true); // Atualiza o estado para indicar que o usuário está autenticado
+    setIsAuthenticated(true);
   };
 
-  const handleViewChange = (newView: 'lista' | 'criar') => {
-    setView(newView); // Alterna entre as visualizações
+  const handleViewChange = (newView: 'lista' | 'criar' | 'alterar') => {
+    setView(newView);
   };
 
   return (
@@ -22,14 +23,17 @@ const App: React.FC = () => {
         <Login onLoginSuccess={handleLoginSuccess} />
       ) : (
         <div>
-          {/* Botões para alternar entre lista de produtos e criação de produtos */}
+          {/* Botões para alternar entre as visualizações */}
           <div>
             <button onClick={() => handleViewChange('lista')}>Lista de Produtos</button>
             <button onClick={() => handleViewChange('criar')}>Criar Produto</button>
+            <button onClick={() => handleViewChange('alterar')}>Alterar Produto</button>
           </div>
 
           {/* Renderiza a visualização correspondente */}
-          {view === 'lista' ? <ListaProdutos /> : <CriarProduto />}
+          {view === 'lista' && <ListaProdutos />}
+          {view === 'criar' && <CriarProduto />}
+          {view === 'alterar' && <UpdateProduto />}
         </div>
       )}
     </div>
