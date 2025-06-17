@@ -1,39 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
+interface Categoria {
+  id: string;
+  nome: string;
+}
 
 const CriarProduto: React.FC = () => {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [preco, setPreco] = useState<number>(); // Inicializa como número
-  const [categoriaId, setCategoriaId] = useState(''); // Adiciona categoria_id
-  const [estoque, setEstoque] = useState<number>(); // Adiciona estoque
+  const [preco, setPreco] = useState<number>();
+  const [categoriaId, setCategoriaId] = useState('');
+  const [novaCategoria, setNovaCategoria] = useState('');
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [estoque, setEstoque] = useState<number>();
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Buscar categorias existentes ao carregar
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get('http://localhost:3000/categorias', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCategorias(response.data);
+      } catch {
+        // Trate erro se quiser
+      }
+    };
+    fetchCategorias();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('authToken'); // Recupera o token armazenado
+      const token = localStorage.getItem('authToken');
       if (!token) {
         setErrorMessage('Usuário não autenticado. Faça login novamente.');
         return;
       }
 
-      // Validação dos dados antes de enviar
-      const produtoData = {
+      // Monta o objeto de acordo com a escolha do usuário
+      const produtoData: any = {
         nome,
         descricao,
-        preco: Number(preco), // Converte para número
-        categoria_id: String(categoriaId), // Converte para string
-        estoque: Number(estoque), // Converte para número
+        preco: Number(preco),
+        estoque: Number(estoque),
       };
+
+      if (novaCategoria.trim()) {
+        produtoData.nova_categoria = novaCategoria.trim();
+      } else if (categoriaId) {
+        produtoData.categoria_id = categoriaId;
+      } else {
+        setErrorMessage('Selecione ou crie uma categoria.');
+        return;
+      }
 
       await axios.post(
         'http://localhost:3000/produtos',
         produtoData,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Envia o token no cabeçalho
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -44,6 +75,7 @@ const CriarProduto: React.FC = () => {
       setDescricao('');
       setPreco(0);
       setCategoriaId('');
+      setNovaCategoria('');
       setEstoque(0);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -82,17 +114,31 @@ const CriarProduto: React.FC = () => {
           <input
             type="number"
             value={preco}
-            onChange={(e) => setPreco(Number(e.target.value))} // Converte para número
+            onChange={(e) => setPreco(Number(e.target.value))}
             required
           />
         </div>
         <div>
-          <label>Categoria ID:</label>
+          <label>Categoria existente:</label>
+          <select
+            value={categoriaId}
+            onChange={e => setCategoriaId(e.target.value)}
+            disabled={!!novaCategoria.trim()}
+          >
+            <option value="">Selecione uma categoria</option>
+            {categorias.map(cat => (
+              <option key={cat.id} value={cat.id}>{cat.nome}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Ou nova categoria:</label>
           <input
             type="text"
-            value={categoriaId}
-            onChange={(e) => setCategoriaId(e.target.value)} // Converte para string
-            required
+            value={novaCategoria}
+            onChange={e => setNovaCategoria(e.target.value)}
+            placeholder="Digite o nome da nova categoria"
+            disabled={!!categoriaId}
           />
         </div>
         <div>
@@ -100,7 +146,7 @@ const CriarProduto: React.FC = () => {
           <input
             type="number"
             value={estoque}
-            onChange={(e) => setEstoque(Number(e.target.value))} // Converte para número
+            onChange={(e) => setEstoque(Number(e.target.value))}
             required
           />
         </div>

@@ -209,7 +209,6 @@ const UpdateProduto: React.FC = () => {
           <button type="submit">Atualizar Produto</button>
         </form>
       )}
-      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
     </div>
   );
 };
