@@ -17,7 +17,6 @@ const CriarProduto: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Buscar categorias existentes ao carregar
   useEffect(() => {
     const fetchCategorias = async () => {
       try {
@@ -42,7 +41,6 @@ const CriarProduto: React.FC = () => {
         return;
       }
 
-      // Monta o objeto de acordo com a escolha do usuário
       const produtoData: any = {
         nome,
         descricao,
@@ -79,51 +77,153 @@ const CriarProduto: React.FC = () => {
       setEstoque(0);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error('Erro na requisição:', error.response?.data || error.message);
         setErrorMessage(error.response?.data?.message || 'Erro ao criar o produto. Tente novamente.');
       } else {
-        console.error('Erro inesperado:', error);
         setErrorMessage('Erro inesperado. Tente novamente.');
       }
     }
   };
 
-  return (
-    <div>
-      <h1>Criar Produto</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nome:</label>
+   return (
+    <div
+      style={{
+        minHeight: '100vh',
+        width: '100vw',
+        background: 'linear-gradient(135deg, #f9fbe7 0%, #e8f5e9 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: "'Quicksand', 'Segoe UI', Arial, sans-serif",
+        paddingTop: '2.0rem' // Use paddingTop para o espaço igual ao da lista
+      }}
+    >
+    
+            <form
+  onSubmit={handleSubmit}
+  style={{
+    background: '#fff',
+    padding: '2.5rem 2rem',
+    borderRadius: '22px',
+    boxShadow: '0 6px 32px rgba(76, 175, 80, 0.13)',
+    minWidth: '350px',
+    maxWidth: '95vw',
+    width: '420px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    border: '2px solid #c8e6c9'
+  }}
+>
+  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
+    <span style={{ fontSize: '2.2rem', marginRight: '0.7rem' }}>🥦</span>
+    <h1
+      style={{
+        color: '#388e3c',
+        fontWeight: 900,
+        letterSpacing: '1.5px',
+        fontFamily: "'Quicksand', 'Segoe UI', Arial, sans-serif",
+        margin: 0,
+        fontSize: '2.3rem'
+      }}
+    >
+      Criar Produto
+    </h1>
+  </div>
+  <div style={{ marginBottom: '1rem', width: '100%' }}>
+          <label style={{ color: '#689f38', fontWeight: 700, marginBottom: '0.3rem', display: 'block' }}>
+            Nome:
+          </label>
           <input
             type="text"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             required
+            style={{
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '0.7rem',
+              borderRadius: '10px',
+              border: '1.5px solid #aed581',
+              fontSize: '1.05rem',
+              outline: 'none',
+              background: '#f1f8e9',
+              color: '#33691e',
+              fontFamily: "'Quicksand', 'Segoe UI', Arial, sans-serif"
+            }}
+            placeholder="Nome do produto"
           />
         </div>
-        <div>
-          <label>Descrição:</label>
+        <div style={{ marginBottom: '1rem', width: '100%' }}>
+          <label style={{ color: '#689f38', fontWeight: 700, marginBottom: '0.3rem', display: 'block' }}>
+            Descrição:
+          </label>
           <textarea
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
             required
+            style={{
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '0.7rem',
+              borderRadius: '10px',
+              border: '1.5px solid #aed581',
+              fontSize: '1.05rem',
+              outline: 'none',
+              background: '#f1f8e9',
+              color: '#33691e',
+              fontFamily: "'Quicksand', 'Segoe UI', Arial, sans-serif",
+              resize: 'vertical',
+              minHeight: '60px'
+            }}
+            placeholder="Descrição do produto"
           />
         </div>
-        <div>
-          <label>Preço:</label>
+        <div style={{ marginBottom: '1rem', width: '100%' }}>
+          <label style={{ color: '#689f38', fontWeight: 700, marginBottom: '0.3rem', display: 'block' }}>
+            Preço:
+          </label>
           <input
             type="number"
             value={preco}
             onChange={(e) => setPreco(Number(e.target.value))}
             required
+            style={{
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '0.7rem',
+              borderRadius: '10px',
+              border: '1.5px solid #aed581',
+              fontSize: '1.05rem',
+              outline: 'none',
+              background: '#f1f8e9',
+              color: '#33691e',
+              fontFamily: "'Quicksand', 'Segoe UI', Arial, sans-serif"
+            }}
+            placeholder="Preço"
+            min="0"
+            step="0.01"
           />
         </div>
-        <div>
-          <label>Categoria existente:</label>
+        <div style={{ marginBottom: '1rem', width: '100%' }}>
+          <label style={{ color: '#689f38', fontWeight: 700, marginBottom: '0.3rem', display: 'block' }}>
+            Categoria existente:
+          </label>
           <select
             value={categoriaId}
             onChange={e => setCategoriaId(e.target.value)}
             disabled={!!novaCategoria.trim()}
+            style={{
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '0.7rem',
+              borderRadius: '10px',
+              border: '1.5px solid #aed581',
+              fontSize: '1.05rem',
+              outline: 'none',
+              background: '#f1f8e9',
+              color: '#33691e',
+              fontFamily: "'Quicksand', 'Segoe UI', Arial, sans-serif"
+            }}
           >
             <option value="">Selecione uma categoria</option>
             {categorias.map(cat => (
@@ -131,31 +231,77 @@ const CriarProduto: React.FC = () => {
             ))}
           </select>
         </div>
-        <div>
-          <label>Ou nova categoria:</label>
+        <div style={{ marginBottom: '1rem', width: '100%' }}>
+          <label style={{ color: '#689f38', fontWeight: 700, marginBottom: '0.3rem', display: 'block' }}>
+            Ou nova categoria:
+          </label>
           <input
             type="text"
             value={novaCategoria}
             onChange={e => setNovaCategoria(e.target.value)}
             placeholder="Digite o nome da nova categoria"
             disabled={!!categoriaId}
+            style={{
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '0.7rem',
+              borderRadius: '10px',
+              border: '1.5px solid #aed581',
+              fontSize: '1.05rem',
+              outline: 'none',
+              background: '#f1f8e9',
+              color: '#33691e',
+              fontFamily: "'Quicksand', 'Segoe UI', Arial, sans-serif"
+            }}
           />
         </div>
-        <div>
-          <label>Estoque:</label>
+        <div style={{ marginBottom: '1.2rem', width: '100%' }}>
+          <label style={{ color: '#689f38', fontWeight: 700, marginBottom: '0.3rem', display: 'block' }}>
+            Estoque:
+          </label>
           <input
             type="number"
             value={estoque}
             onChange={(e) => setEstoque(Number(e.target.value))}
             required
+            style={{
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '0.7rem',
+              borderRadius: '10px',
+              border: '1.5px solid #aed581',
+              fontSize: '1.05rem',
+              outline: 'none',
+              background: '#f1f8e9',
+              color: '#33691e',
+              fontFamily: "'Quicksand', 'Segoe UI', Arial, sans-serif"
+            }}
+            placeholder="Quantidade em estoque"
+            min="0"
           />
         </div>
-        {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <button type="submit">Criar Produto</button>
+        {successMessage && <p style={{ color: '#388e3c', fontWeight: 700, marginBottom: '0.8rem' }}>{successMessage}</p>}
+        {errorMessage && <p style={{ color: '#d32f2f', fontWeight: 700, marginBottom: '0.8rem' }}>{errorMessage}</p>}
+        <button
+          type="submit"
+          style={{
+            background: 'linear-gradient(90deg, #43a047 0%, #cddc39 100%)',
+            color: '#fff',
+            fontWeight: 800,
+            fontSize: '1.15rem',
+            border: 'none',
+            borderRadius: '10px',
+            padding: '0.8rem 2.5rem',
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+            boxShadow: '0 2px 10px rgba(67, 160, 71, 0.13)',
+            letterSpacing: '1px'
+          }}
+        >
+          Criar Produto
+        </button>
       </form>
     </div>
   );
-};
-
+}
 export default CriarProduto;

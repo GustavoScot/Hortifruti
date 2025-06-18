@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import ListaProdutos from './ListaProdutos';
+import ListaProdutos from './components/ListaProdutos';
 import Login from './components/Login';
 import CriarProduto from './components/CriarProduto';
 import UpdateProduto from './components/UpdateProduto';
 import DeleteProduto from './components/DeleteProduto';
+import NavBar from './components/NavBar';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [view, setView] = useState<'lista' | 'criar' | 'alterar' | 'deletar' >('lista'); // Adiciona 'alterar'
+  const [view, setView] = useState<'lista' | 'criar' | 'alterar' | 'deletar'>('lista');
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
@@ -19,20 +20,11 @@ const App: React.FC = () => {
 
   return (
     <div>
-      {/* Renderiza a tela de login se o usuário não estiver autenticado */}
       {!isAuthenticated ? (
         <Login onLoginSuccess={handleLoginSuccess} />
       ) : (
         <div>
-          {/* Botões para alternar entre as visualizações */}
-          <div>
-            <button onClick={() => handleViewChange('lista')}>Lista de Produtos</button>
-            <button onClick={() => handleViewChange('criar')}>Criar Produto</button>
-            <button onClick={() => handleViewChange('alterar')}>Alterar Produto</button>
-            <button onClick={() => handleViewChange('deletar')}>Deletar Produto</button>
-          </div>
-
-          {/* Renderiza a visualização correspondente */}
+          <NavBar onViewChange={handleViewChange} activeView={view} />
           {view === 'lista' && <ListaProdutos />}
           {view === 'criar' && <CriarProduto />}
           {view === 'alterar' && <UpdateProduto />}
